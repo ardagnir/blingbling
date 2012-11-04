@@ -117,7 +117,7 @@ local function update(v_graph)
   end
 --Drawn the v_graph
   
-  if data[v_graph].value > 0 then
+  if data[v_graph].value > -1 then
     if data[v_graph].bar == true then
       --4 bar are use to represent data:
       --bar width:
@@ -321,6 +321,11 @@ local function set_master(parameters)
     local f=io.popen(cmd)
     f:close()
 end
+local function set_mpd(parameters)
+    local cmd = "mpc volume " ..parameters
+    local f=io.popen(cmd)
+    f:close()
+end
 
 ---Add a value to the graph
 --@param v_graph the volume graph
@@ -395,13 +400,35 @@ end
 local function set_master_control(v_graph)
     v_graph.widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function()
-      set_master("toggle")
+	if data[v_graph].value==0 then
+		set_master("100%")
+	else
+      set_master("0%")
+	end
     end),
     awful.button({ }, 5, function()
-      set_master("2%-")
+      set_master("5%-")
     end),
     awful.button({ }, 4, function()
-      set_master("2%+")
+      set_master("5%+")
+    end)))
+end
+
+
+local function set_mpd_control(v_graph)
+    v_graph.widget:buttons(awful.util.table.join(
+    awful.button({ }, 1, function()
+	if data[v_graph].value==0 then
+		set_mpd("100")
+	else
+      set_mpd("0")
+	end
+    end),
+    awful.button({ }, 5, function()
+      set_mpd("-5")
+    end),
+    awful.button({ }, 4, function()
+      set_mpd("+5")
     end)))
 end
 
@@ -462,6 +489,7 @@ function new(args)
     v_graph.update_master = update_master
     v_graph.update_mpd= update_mpd
     v_graph.set_master_control = set_master_control
+    v_graph.set_mpd_control = set_mpd_control
     for _, prop in ipairs(properties) do
         v_graph["set_" .. prop] = _M["set_" .. prop]
     end
