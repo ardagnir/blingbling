@@ -330,7 +330,7 @@ local function generate(mpd_graph)
     end
     mpd_graph_context:show_text(data[mpd_graph].fifo_error)
     helpers.draw_text_and_background(mpd_graph_context, 
-                                        data[mpd_graph].fifo_error, 
+                                        "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",--data[mpd_graph].fifo_error, 
                                         h_margin, 
                                         (data[mpd_graph].height/2) , 
                                         data[mpd_graph].background_text_color, 
